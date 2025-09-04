@@ -5,6 +5,8 @@ import {jumpLogin} from '@/router'
 import {notification} from 'ant-design-vue'
 import {langKey} from "@/utils/consts";
 import Relogin from '@/views/relogin/index.vue'
+import BackendAPI from "@/api/backend";
+import {createApp} from "vue";
 
 /**
  * 初始化package
@@ -18,20 +20,11 @@ export const initPackages = () => {
 
     if (!token) return
 
+    const active = BackendAPI.getActive()
+
     const protocol = window.location.protocol.replace('http', 'ws');
-    const host = document.location.host;
-    const url = `${protocol}${host}${BASE_API}/messaging/${token}?${TOKEN_KEY_URL}=${token}`;
-    // wsClient.setOptions({
-    //     onError(message) {
-    //         notification.error({
-    //             key: 'ws-error',
-    //             message: message.message,
-    //             style: {
-    //                 zIndex: 1090
-    //             },
-    //         });
-    //     }
-    // })
+    const host = active?.url ? new URL(active.url).host : document.location.host;
+    const url = `${protocol}//${host}${BASE_API}/messaging/${token}?${TOKEN_KEY_URL}=${token}`;
     wsClient.initWebSocket(url);
     wsClient.connect()
 };
@@ -44,8 +37,10 @@ const _handleReconnect = async () => {
     return await modalApp?.open?.();
 }
 export const initAxios = () => {
+    const active = BackendAPI.getActive()
     crateAxios(
         {
+            baseURL: active?.url,
             langKey: langKey,
             isCreateTokenRefresh: true,
             tokenExpiration: () => {
