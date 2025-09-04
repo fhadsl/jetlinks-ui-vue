@@ -97,11 +97,21 @@ export const AUTHORIZE_ROUTE: RouteRecordRaw = {
     }
 }
 
+import { useUserStore } from '@/store/user';
+
 export const BACKEND_MANAGER_ROUTE: RouteRecordRaw = {
     path: '/backend-manager',
     name: 'BackendManager',
     component: () => import('@/views/backend-manager/index.vue'),
     meta: {
         title: '服务管理'
+    },
+    beforeEnter: (_to, _from, next) => {
+        const user = useUserStore();
+        if (user.isAdmin) {
+            next();
+        } else {
+            next('/');
+        }
     }
 }
