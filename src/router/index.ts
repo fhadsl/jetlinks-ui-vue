@@ -4,7 +4,7 @@ import {
 } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import { getToken, removeToken } from '@jetlinks-web/utils'
-import { NOT_FIND_ROUTE, LOGIN_ROUTE, OAuth2, OAuthWechat, AccountCenterBind, AUTHORIZE_ROUTE } from './basic'
+import { NOT_FIND_ROUTE, LOGIN_ROUTE, OAuth2, OAuthWechat, AccountCenterBind, AUTHORIZE_ROUTE, BACKEND_MANAGER_ROUTE } from './basic'
 import {isSubApp} from '@/utils/consts'
 import { useApplication, useUserStore, useSystemStore, useMenuStore  } from '@/store'
 import { modules } from '@/utils/modules'
@@ -38,6 +38,7 @@ const router = createRouter({
     OAuthWechat,
     AccountCenterBind,
     AUTHORIZE_ROUTE,
+    BACKEND_MANAGER_ROUTE,
     ...getModulesRoutes()
   ],
   scrollBehavior(to, form, savedPosition) {
